@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", sans-serif;
+
+  /* Custom palette for light premium feel matching the BillCom logo */
+  --color-primary: #006a61; /* Brand Teal from logo */
+  --color-accent-mint: #05f3ad; 
+  --color-accent-cyan: #00f2fe;
+  --color-text-dark: #1a1c1e; /* Charcoal Black from logo */
+  --color-text-muted: #6b7280; /* Muted Gray from logo */
+  --color-bg-light: #f8fafc;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Reset and basic body setting */
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: #f8fafc;
+  color: #1a1c1e;
+  overflow-x: hidden;
+}
+
+/* Base styles for standard UI elements */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Premium Light Grid Overlay */
+.grid-bg-overlay {
+  background-image: 
+    linear-gradient(to right, rgba(0, 106, 97, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 106, 97, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Soft glowing light fields */
+.radial-glow {
+  background: radial-gradient(circle 600px at var(--x, 50%) var(--y, 50%), rgba(0, 106, 97, 0.05), transparent 80%);
+}
+
+.radial-glow-mint {
+  background: radial-gradient(circle 500px at var(--x, 50%) var(--y, 50%), rgba(5, 243, 173, 0.04), transparent 80%);
+}
+
+.radial-glow-purple {
+  background: radial-gradient(circle 800px at var(--x, 50%) var(--y, 50%), rgba(112, 0, 255, 0.02), transparent 80%);
+}
+
+/* Premium Light Glassmorphism Card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 106, 97, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+}
+
+.glass-card-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-card-hover:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 106, 97, 0.22);
+  box-shadow: 0 10px 40px rgba(0, 106, 97, 0.06);
+  transform: translateY(-2px);
+}
+
+/* Custom Keyframes for streams/pulses */
+@keyframes stream {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.animate-stream {
+  animation: stream 8s linear infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+}
+.animate-pulse-ring {
+  animation: pulse-ring 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
