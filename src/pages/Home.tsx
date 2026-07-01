@@ -31,7 +31,9 @@ import {
   MessageSquare,
   ShieldCheck,
   Database,
-  Star
+  Star,
+  Menu,
+  Bell
 } from 'lucide-react';
 
 interface CatalogItem {
@@ -149,6 +151,22 @@ export default function Home() {
 
   // INTERACTIVE DEMO (POS) STATES
   const [activeTab, setActiveTab] = useState<'dashboard' | 'pos' | 'invoices' | 'services' | 'inventory' | 'crm' | 'expenses' | 'staff' | 'settings'>('dashboard');
+  const [deviceMode, setDeviceMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobileLayout = deviceMode === 'mobile' || (deviceMode === 'desktop' && windowWidth < 768);
+  const isTabletLayout = deviceMode === 'tablet' || (deviceMode === 'desktop' && windowWidth >= 768 && windowWidth < 1024);
+  const isDesktopLayout = deviceMode === 'desktop' && windowWidth >= 1024;
+  console.log("SANDBOX LOG:", { deviceMode, windowWidth, isDesktopLayout, isMobileLayout, isTabletLayout, innerWidth: window.innerWidth });
   const [industryFilter, setIndustryFilter] = useState<'All' | 'Tiffin & Cafe' | 'Salon & Spa' | 'Supermarket'>('All');
   const [businessName, setBusinessName] = useState<string>('Gachibowli HQ Terminal');
   const [taxRate, setTaxRate] = useState<number>(18);
@@ -1051,11 +1069,83 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="w-full max-w-5xl mx-auto rounded-2xl p-2 bg-gradient-to-b from-slate-200 to-transparent border border-slate-200 shadow-xl relative">
-          <div className="rounded-xl overflow-hidden glass-card aspect-[16/9] min-h-[560px] relative flex flex-col border border-[#006a61]/10">
+        {/* Device Switcher Preview Toggle */}
+        <div className="hidden md:flex justify-center gap-2 mb-6 font-sans select-none">
+          <button 
+            type="button"
+            onClick={() => setDeviceMode('desktop')} 
+            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${deviceMode === 'desktop' ? 'bg-[#006a61] text-white shadow-md shadow-[#006a61]/25 border-transparent' : 'bg-white hover:bg-slate-50 text-slate-600 border border-slate-200'}`}
+          >
+            🖥️ Desktop POS
+          </button>
+          <button 
+            type="button"
+            onClick={() => setDeviceMode('tablet')} 
+            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${deviceMode === 'tablet' ? 'bg-[#006a61] text-white shadow-md shadow-[#006a61]/25 border-transparent' : 'bg-white hover:bg-slate-50 text-slate-600 border border-slate-200'}`}
+          >
+            📟 Tablet Register
+          </button>
+          <button 
+            type="button"
+            onClick={() => setDeviceMode('mobile')} 
+            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${deviceMode === 'mobile' ? 'bg-[#006a61] text-white shadow-md shadow-[#006a61]/25 border-transparent' : 'bg-white hover:bg-slate-50 text-slate-600 border border-slate-200'}`}
+          >
+            📱 Mobile App
+          </button>
+        </div>
+
+        {/* Desktop: Browser window frame | Mobile: Phone frame | Tablet: Tablet frame */}
+        <div className={`w-full mx-auto transition-all duration-500 ease-in-out relative ${
+          isMobileLayout && windowWidth >= 768
+            ? 'max-w-[360px] rounded-[3rem] p-3 bg-slate-900 shadow-2xl border-4 border-slate-800' 
+            : isTabletLayout && windowWidth >= 768
+              ? 'max-w-[720px] rounded-[2rem] p-3.5 bg-slate-900 shadow-2xl border-4 border-slate-800' 
+              : 'max-w-5xl rounded-2xl p-1.5 lg:p-2 bg-gradient-to-b from-slate-200 to-transparent border border-slate-200 shadow-xl'
+        }`}>
+          <div className={`overflow-hidden transition-all duration-500 ease-in-out relative flex flex-col ${
+            isMobileLayout
+              ? windowWidth < 768
+                ? 'rounded-xl bg-[#f8fafc] h-[540px] border border-slate-200 shadow-sm'
+                : 'rounded-[2.2rem] bg-[#f8fafc] h-[640px] border border-slate-950 shadow-inner'
+              : isTabletLayout
+                ? windowWidth < 768
+                  ? 'rounded-xl bg-[#f8fafc] h-[540px] border border-slate-200 shadow-sm'
+                  : 'rounded-[1.5rem] bg-[#f8fafc] h-[520px] border border-slate-950 shadow-inner'
+                : 'rounded-xl glass-card lg:aspect-[16/9] min-h-[480px] lg:min-h-[560px] border border-[#006a61]/10'
+          }`}>
             
-            {/* Window Header */}
-            <div className="bg-slate-50 px-4 py-3 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
+            {/* Phone notch & status bar (Mobile mode only) */}
+            {isMobileLayout && (
+              <div className="bg-slate-50 px-5 pt-2 pb-1.5 flex justify-between items-center text-[9px] text-slate-800 font-bold border-b border-slate-100 flex-shrink-0 relative select-none">
+                <span>9:41 AM</span>
+                {/* Camera notch (visible only on desktop screen when previewing mobile mockup) */}
+                {windowWidth >= 768 && (
+                  <div className="w-16 h-3 bg-slate-950 rounded-full absolute top-1 left-1/2 transform -translate-x-1/2 flex items-center justify-center">
+                    <div className="w-1 h-1 rounded-full bg-slate-800 mr-2" />
+                    <div className="w-3 h-0.5 rounded-full bg-slate-800" />
+                  </div>
+                )}
+                <div className="flex items-center gap-1">
+                  <span>5G</span>
+                  <span className="w-3.5 h-2 rounded-xs border border-slate-800 p-0.5 flex items-center"><span className="h-full w-2 bg-slate-800 block rounded-[1px]" /></span>
+                </div>
+              </div>
+            )}
+
+            {/* Tablet status bar (Tablet mode only) */}
+            {isTabletLayout && (
+              <div className="bg-slate-50 px-5 py-1.5 flex justify-between items-center text-[9px] text-slate-605 font-bold border-b border-slate-100 flex-shrink-0 select-none">
+                <span>SmartBill OS v1.2</span>
+                <span>9:41 AM - Wednesday</span>
+                <div className="flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse mr-1" />
+                  <span>HQ Synced</span>
+                </div>
+              </div>
+            )}
+
+            {/* Desktop Browser Chrome Header */}
+            <div className={`${isDesktopLayout ? 'hidden lg:flex' : 'hidden'} bg-slate-50 px-4 py-3 border-b border-slate-200 items-center justify-between flex-shrink-0`}>
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-full bg-rose-400 block" />
                 <span className="w-3 h-3 rounded-full bg-amber-400 block" />
@@ -1072,11 +1162,26 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Mobile App Header (shown in mobile/tablet mode, or in desktop mode on small screens) */}
+            <div className={`${!isDesktopLayout ? 'flex' : 'hidden'} bg-white px-3 py-2 border-b border-slate-200 items-center justify-between flex-shrink-0 select-none`}>
+              <div className="flex items-center gap-2">
+                <Menu size={16} className="text-slate-500 cursor-pointer hover:bg-slate-50 p-0.5 rounded" />
+                <span className="text-[10px] font-extrabold text-slate-800 tracking-tight font-sans">BillCom Mobile</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="bg-[#e8f5f3] border border-[#006a61]/10 rounded-full px-2 py-0.5 text-[8px] font-bold text-[#006a61] flex items-center gap-0.5">
+                  <span className="w-1 h-1 bg-[#006a61] rounded-full animate-pulse mr-0.5" />
+                  <span>Main HQ</span>
+                </div>
+                <Bell size={13} className="text-slate-500 cursor-pointer hover:text-slate-800 transition-colors" />
+              </div>
+            </div>
+
             {/* Application Content Grid */}
-            <div className="flex-1 grid grid-cols-12 overflow-hidden bg-[#f8fafc]">
+            <div className={`flex-1 grid overflow-hidden bg-[#f8fafc] relative ${isDesktopLayout ? 'grid-cols-12' : 'grid-cols-1'}`}>
               
               {/* SIDEBAR NAVIGATION */}
-              <div className="col-span-3 border-r border-slate-200 bg-slate-50/50 p-3.5 space-y-4 flex flex-col justify-between overflow-y-auto">
+              <div className={`${isDesktopLayout ? 'flex col-span-3' : 'hidden'} border-r border-slate-200 bg-slate-50/50 p-3.5 space-y-4 flex-col justify-between overflow-y-auto`}>
                 <div className="space-y-4">
                   <div className="flex items-center gap-1.5 px-2 py-1 bg-white border border-slate-200 rounded-lg shadow-sm">
                     <Store size={13} className="text-[#006a61]" />
@@ -1130,7 +1235,7 @@ export default function Home() {
               </div>
 
               {/* MAIN VIEWPORT CONTAINER */}
-              <div className="col-span-9 p-5 overflow-y-auto flex flex-col justify-between h-full bg-[#f8fafc]">
+              <div className={`${isDesktopLayout ? 'col-span-9 pb-5' : 'col-span-1 pb-16'} p-3 lg:p-5 overflow-y-auto flex flex-col justify-between h-full bg-[#f8fafc]`}>
                 <AnimatePresence mode="wait">
                   
                   {/* TAB 1: DASHBOARD */}
@@ -1155,7 +1260,7 @@ export default function Home() {
                         </button>
                       </div>
 
-                      <div className="grid grid-cols-4 gap-2.5">
+                      <div className={`grid gap-2.5 ${isDesktopLayout ? 'grid-cols-2 lg:grid-cols-4' : 'grid-cols-2'}`}>
                         {[
                           { label: "Today's Revenue", val: `₹${revenueTotal.toLocaleString()}`, status: 'Live feed', icon: DollarSign, color: '#006a61' },
                           { label: 'Bills Generated', val: `${billsCount}`, status: 'Active counts', icon: Receipt, color: '#006a61' },
@@ -1175,8 +1280,8 @@ export default function Home() {
                         ))}
                       </div>
 
-                      <div className="grid grid-cols-12 gap-3 flex-1 my-1">
-                        <div className="col-span-8 bg-white border border-slate-200 p-3 rounded-xl flex flex-col justify-between shadow-sm">
+                      <div className={`grid gap-3 flex-1 my-1 ${isDesktopLayout ? 'grid-cols-1 lg:grid-cols-12' : 'grid-cols-1'}`}>
+                        <div className={`bg-white border border-slate-200 p-3 rounded-xl flex flex-col justify-between shadow-sm ${isDesktopLayout ? 'col-span-1 lg:col-span-8' : 'col-span-1'}`}>
                           <span className="text-[8px] font-bold text-slate-400 uppercase mb-2 text-left">Revenue Trend (Last 7 Days)</span>
                           <div className="h-24 flex items-end justify-between gap-2 relative">
                             {hoveredBarIndex !== null && (
@@ -1209,7 +1314,7 @@ export default function Home() {
                           </div>
                         </div>
 
-                        <div className="col-span-4 bg-white border border-slate-200 p-3 rounded-xl shadow-sm flex flex-col justify-between">
+                        <div className={`bg-white border border-slate-200 p-3 rounded-xl shadow-sm flex flex-col justify-between ${isDesktopLayout ? 'col-span-1 lg:col-span-4' : 'col-span-1'}`}>
                           <span className="text-[8px] font-bold text-slate-400 uppercase mb-2 text-left font-sans">Top Demand</span>
                           <div className="space-y-1.5 overflow-y-auto max-h-[90px]">
                             {[
@@ -1231,8 +1336,8 @@ export default function Home() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-12 gap-3">
-                        <div className="col-span-8 bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm overflow-hidden">
+                      <div className={`grid gap-3 ${isDesktopLayout ? 'grid-cols-1 lg:grid-cols-12' : 'grid-cols-1'}`}>
+                        <div className={`bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm overflow-hidden ${isDesktopLayout ? 'col-span-1 lg:col-span-8' : 'col-span-1'}`}>
                           <span className="text-[8px] font-bold text-slate-400 uppercase mb-2 border-b border-slate-100 pb-1 block text-left font-sans">Recent Activity Logs</span>
                           <table className="w-full text-left border-collapse text-[9px]">
                             <thead>
@@ -1256,7 +1361,7 @@ export default function Home() {
                           </table>
                         </div>
 
-                        <div className="col-span-4 bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm flex flex-col justify-between text-slate-800 text-left">
+                        <div className={`bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm flex flex-col justify-between text-slate-800 text-left ${isDesktopLayout ? 'col-span-1 lg:col-span-4' : 'col-span-1'}`}>
                           <div>
                             <span className="text-[8px] font-bold text-slate-400 uppercase mb-1 block font-sans">Net Profit Balance</span>
                             <div className="text-sm font-black font-mono text-[#006a61]">₹{(revenueTotal - totalExpenseSum).toLocaleString()}</div>
@@ -1277,7 +1382,7 @@ export default function Home() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
-                      className="grid grid-cols-12 gap-4 flex-1 items-start h-full relative"
+                      className={`grid gap-4 flex-1 items-start h-full relative ${isDesktopLayout ? 'grid-cols-1 lg:grid-cols-12' : 'grid-cols-1'}`}
                     >
                       <AnimatePresence>
                         {isCheckingOut && (
@@ -1296,7 +1401,7 @@ export default function Home() {
                         )}
                       </AnimatePresence>
 
-                      <div className="col-span-4 space-y-3">
+                      <div className={`${isDesktopLayout ? 'col-span-1 lg:col-span-4' : 'col-span-1'} space-y-3`}>
                         <div className="flex justify-between items-center">
                           <span className="text-[8px] font-bold uppercase tracking-wider text-slate-400 font-mono block text-left">POS Catalog</span>
                         </div>
@@ -1348,7 +1453,7 @@ export default function Home() {
                         </div>
                       </div>
 
-                      <div className="col-span-5 bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm space-y-3 flex flex-col justify-between min-h-[350px]">
+                      <div className={`bg-white border border-slate-200 rounded-xl p-3.5 shadow-sm space-y-3 flex flex-col justify-between ${isDesktopLayout ? 'col-span-1 lg:col-span-5 min-h-[350px]' : 'col-span-1 min-h-[280px]'}`}>
                         <div>
                           <div className="flex justify-between items-center border-b border-slate-100 pb-1.5 mb-2">
                             <span className="text-[9px] font-bold uppercase text-slate-700 font-mono">Invoice compiled</span>
@@ -1488,7 +1593,7 @@ export default function Home() {
                       </div>
 
                       {/* Thermal Printer Simulator */}
-                      <div className="col-span-3 flex flex-col items-center justify-center self-center h-full pt-2">
+                      <div className={`${isDesktopLayout ? 'hidden lg:flex lg:col-span-3' : 'hidden'} flex-col items-center justify-center self-center h-full pt-2`}>
                         <div className="relative flex flex-col items-center">
                           <div className="absolute bottom-[75px] left-1/2 transform -translate-x-1/2 w-[110px] h-[160px] overflow-hidden pointer-events-none z-10 flex flex-col justify-end">
                             <AnimatePresence>
@@ -1959,6 +2064,56 @@ export default function Home() {
                   )}
 
                 </AnimatePresence>
+              </div>
+
+              {/* MOBILE BOTTOM TAB BAR */}
+              <div className={`${isDesktopLayout ? 'hidden' : 'flex'} absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-1 py-1 justify-around items-center z-30 select-none`}>
+                {[
+                  { id: 'dashboard', label: 'Overview', icon: LayoutDashboard },
+                  { id: 'services', label: 'Catalog', icon: Boxes },
+                  { id: 'pos', label: 'Billing', icon: Receipt, isCenter: true },
+                  { id: 'invoices', label: 'Invoices', icon: FileText },
+                  { id: 'settings', label: 'More', icon: Settings }
+                ].map((item) => {
+                  const IconComponent = item.icon;
+                  const isActive = activeTab === item.id;
+                  
+                  if (item.isCenter) {
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => setActiveTab(item.id as any)}
+                        className="flex flex-col items-center justify-center -mt-3.5 relative z-40 cursor-pointer"
+                      >
+                        <div className={`p-2.5 rounded-full shadow-md transition-all duration-300 ${
+                          isActive 
+                            ? 'bg-[#006a61] text-white scale-110 shadow-[#006a61]/35' 
+                            : 'bg-[#e8f5f3] text-[#006a61] hover:scale-105 shadow-[#006a61]/15'
+                        }`}>
+                          <IconComponent size={16} />
+                        </div>
+                        <span className={`text-[7px] font-bold mt-1 ${isActive ? 'text-[#006a61]' : 'text-slate-450'}`}>
+                          {item.label}
+                        </span>
+                      </button>
+                    );
+                  }
+
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveTab(item.id as any)}
+                      className={`flex flex-col items-center gap-0.5 px-2 py-0.5 rounded-lg text-[7px] font-bold transition-all cursor-pointer ${
+                        isActive 
+                          ? 'text-[#006a61] bg-[#86f2e4]/15' 
+                          : 'text-slate-400 hover:text-slate-650'
+                      }`}
+                    >
+                      <IconComponent size={14} />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
