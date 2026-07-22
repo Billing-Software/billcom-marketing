@@ -36,6 +36,8 @@ import {
   Bell
 } from 'lucide-react';
 
+const WORKSPACE_URL = import.meta.env.VITE_WORKSPACE_URL || 'http://localhost:3000';
+
 interface CatalogItem {
   id: string;
   name: string;
@@ -588,7 +590,7 @@ export default function Home() {
               Try Interactive Sandbox <ArrowRight size={18} />
             </a>
             <a 
-              href="#/pricing"
+              href="/pricing"
               className="w-full sm:w-auto px-8 py-4 rounded-xl glass-card border border-slate-200 text-slate-700 font-bold text-base hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
             >
               View Pricing plans
@@ -2713,7 +2715,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <a 
-              href="http://localhost:3000/login" 
+              href={`${WORKSPACE_URL}/login`} 
               className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#006a61] text-white font-extrabold text-base hover:bg-[#004d47] hover:shadow-[0_4px_15px_rgba(0,106,97,0.3)] transition-all transform hover:scale-[1.03] flex items-center justify-center gap-2 font-sans"
             >
               Launch Cloud Dashboard

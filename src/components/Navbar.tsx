@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import billcomLogo from '../assets/BillCom-text.svg';
 
+const WORKSPACE_URL = import.meta.env.VITE_WORKSPACE_URL || 'http://localhost:3000';
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,9 +29,12 @@ export default function Navbar() {
 
         {/* CTA Header Actions (Desktop) */}
         <div className="hidden md:flex items-center gap-3">
-          <span className="text-[9px] font-black uppercase tracking-widest text-[#006a61] bg-[#006a61]/10 border border-[#006a61]/20 px-2.5 py-1 rounded-full font-sans">
-            Coming Soon
-          </span>
+          <a 
+            href={`${WORKSPACE_URL}/login`} 
+            className="text-[10px] font-black uppercase tracking-widest text-[#006a61] bg-[#006a61]/10 border border-[#006a61]/20 px-4 py-1.5 rounded-full font-sans hover:bg-[#006a61]/20 transition-all active:scale-95 cursor-pointer"
+          >
+            Login
+          </a>
         </div>
 
         {/* Mobile Hamburger Toggle */}
@@ -76,9 +81,13 @@ export default function Navbar() {
           </Link>
         </nav>
         <div className="pt-2">
-          <span className="inline-block text-[9px] font-black uppercase tracking-widest text-[#006a61] bg-[#006a61]/10 border border-[#006a61]/20 px-3 py-1.5 rounded-full font-sans">
-            Coming Soon
-          </span>
+          <a 
+            href={`${WORKSPACE_URL}/login`} 
+            onClick={() => setIsOpen(false)}
+            className="inline-block w-full text-[10px] font-black uppercase tracking-widest text-[#006a61] bg-[#006a61]/10 border border-[#006a61]/20 px-3.5 py-2 rounded-full font-sans hover:bg-[#006a61]/20 transition-all active:scale-95 text-center cursor-pointer"
+          >
+            Login
+          </a>
         </div>
       </div>
     </header>

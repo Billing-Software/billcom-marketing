@@ -59,7 +59,7 @@ export default function Pricing() {
               </div>
             </div>
             <a 
-              href="http://localhost:3000/register?plan=starter"
+              href="/checkout?plan=1"
               className="w-full py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-center font-bold text-xs mt-8 transition-colors block border border-slate-200 font-sans"
             >
               Start Free Trial
@@ -83,7 +83,7 @@ export default function Pricing() {
               <div className="border-t border-slate-105 pt-6">
                 <ul className="space-y-3.5 text-xs font-semibold text-slate-600 font-sans">
                   <li className="flex items-center gap-2.5">
-                    <CheckCircle2 size={14} className="text-[#006a61]" /> Up to 3 Branches Sync
+                    <CheckCircle2 size={14} className="text-[#006a61]" /> Up to 5 Branches Sync
                   </li>
                   <li className="flex items-center gap-2.5">
                     <CheckCircle2 size={14} className="text-[#006a61]" /> Unlimited Cashier Profiles
@@ -104,7 +104,7 @@ export default function Pricing() {
               </div>
             </div>
             <a 
-              href="http://localhost:3000/register?plan=growth"
+              href="/checkout?plan=2"
               className="w-full py-3 rounded-xl bg-[#006a61] hover:bg-[#004d47] text-white text-center font-bold text-xs mt-8 transition-all block shadow-[0_4px_12px_rgba(0,106,97,0.25)] font-sans"
             >
               Start Free Trial
@@ -146,10 +146,10 @@ export default function Pricing() {
               </div>
             </div>
             <a 
-              href="http://localhost:3000/register?plan=enterprise"
+              href="/checkout?plan=3"
               className="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-center font-bold text-xs mt-8 transition-colors block shadow font-sans"
             >
-              Contact Sales
+              Start Free Trial
             </a>
           </div>
         </div>

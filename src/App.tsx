@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { 
-  HashRouter as Router, 
+  BrowserRouter as Router, 
   Routes, 
   Route 
 } from 'react-router-dom';
@@ -18,6 +18,7 @@ import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Checkout from './pages/Checkout';
 
 import './App.css';
 
@@ -68,6 +69,8 @@ export default function App() {
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/checkout/resume" element={<Checkout />} />
           </Routes>
         </main>
 
